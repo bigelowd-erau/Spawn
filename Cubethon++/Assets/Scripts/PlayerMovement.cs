@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     //the player object's rigid body
-    public Rigidbody rb;
+    private Rigidbody rb;
     public float forwardForce;
     public float sidewaysforce;
     //a sudo player rotation that is set when a new floor is touched
@@ -13,9 +13,25 @@ public class PlayerMovement : MonoBehaviour
     //the calculated radial rotation
     float playerRadRot;
 
-    private void Start()
+    public delegate void GravityChange(float playerRotation);
+    public static event GravityChange ChangeGravity;
+
+    void OnEnable()
     {
+        rb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
         playerRotation = 0;
+        PlayerCollision.OnHitObstacle += Disable;
+        PlayerCollision.OnFloorCollision += CalcNewGravity;
+    }
+    public void Disable()
+    {
+        //this.enabled = false;
+        Destroy(this);
+    }
+    private void OnDisable()
+    {
+        PlayerCollision.OnHitObstacle -= Disable;
+        PlayerCollision.OnFloorCollision -= CalcNewGravity;
     }
 
     // Fixedupdate is called at a fixed time interval
@@ -36,5 +52,13 @@ public class PlayerMovement : MonoBehaviour
     public void MoveRight()
     {
         rb.AddForce(sidewaysforce * Time.deltaTime * Mathf.Cos(playerRadRot), sidewaysforce * Time.deltaTime * Mathf.Sin(playerRadRot), 0, ForceMode.VelocityChange);
+    }
+
+    public void CalcNewGravity(Collision collision)
+    {
+        //set player rotation to the floor's rotation
+        playerRotation = collision.collider.transform.rotation.eulerAngles.z;
+        //change the gravity towards the direction of the players new rotation.
+        ChangeGravity(playerRotation);
     }
 }

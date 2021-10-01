@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class PlayerGravity : MonoBehaviour
 {
-    private void Start()
+    private void OnEnable()
     {
         ChangeGravity(0);
+        PlayerMovement.ChangeGravity += ChangeGravity;
+    }
+
+    private void OnDisable()
+    {
+        ChangeGravity(0);
+        PlayerMovement.ChangeGravity -= ChangeGravity;
     }
 
     //changes grabity to be in the direction of the current floor

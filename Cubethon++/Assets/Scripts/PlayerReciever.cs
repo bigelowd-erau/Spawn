@@ -11,7 +11,7 @@ public class PlayerReciever : PlayerController
     public override void MoveLeft()
     {
         pm.MoveLeft();
-        Debug.Log("Move Left");
+        //Debug.Log("Move Left");
     }
 
     public override void MoveRight()

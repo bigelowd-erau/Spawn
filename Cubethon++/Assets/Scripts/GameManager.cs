@@ -9,7 +9,12 @@ public class GameManager : MonoBehaviour
     public float restartDelay = 1f;
     //the complete level panel
     public GameObject completeLevelScreen;
-    
+
+    public void Start()
+    {
+        PlayerCollision.OnHitObstacle += EndGame;
+    }
+
     //called when the end object is triggered
     public void CompleteLevel()
     {
@@ -39,5 +44,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    
+    private void OnDisable()
+    {
+        PlayerCollision.OnHitObstacle -= EndGame;
+    }
 }
