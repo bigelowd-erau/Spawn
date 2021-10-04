@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09745293b7676ef49ac7ffa7951dd137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 5488632779746080825}
   forwardForce: 25000
   sidewaysforce: 80
   playerRotation: 0
@@ -130,9 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f517b18462db044c8bff3e7066367e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 5488632779746080821}
-  playerGravity: {fileID: 6397764579911803902}
-  client: {fileID: 3320519270952794106, guid: 1b2e13f0f0e333b4cac636a358c41179, type: 3}
 --- !u!114 &6397764579911803902
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class CommandLog
 {
-    public static Queue<Command> commands = new Queue<Command>();
+    public static Queue<CommandArgs> commands;
 
     static CommandLog()
     {
@@ -13,6 +13,6 @@ public static class CommandLog
 
     static void AddCommandToQueue(Command command)
     {
-        commands.Enqueue(command);
+        commands.Enqueue(new CommandArgs(command, Time.time));
     }
 }

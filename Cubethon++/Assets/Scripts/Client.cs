@@ -1,40 +1,34 @@
 using UnityEngine;
 
-public class Client : MonoBehaviour
+public class Client : ClientSubscriber
 {
     private PlayerController m_PlayerReciever;
-    public PlayerMovement pm;
 
     public delegate void PlayerCommandInput(Command command);
     public static event PlayerCommandInput OnPlayerCommandInput;
 
-    private void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         m_PlayerReciever = new PlayerReciever(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>());
-        PlayerCollision.OnHitObstacle += Disable;
     }
 
-    private void Update()
+    public void Update()
     {
         if (Input.GetKey("a"))
         {
             Command playerCommand = new MoveLeftCommand(m_PlayerReciever);
-            OnPlayerCommandInput(playerCommand);
+            OnPlayerCommandInput?.Invoke(playerCommand);
         }
         if (Input.GetKey("d"))
         {
             Command playerCommand = new MoveRightCommand(m_PlayerReciever);
-            OnPlayerCommandInput(playerCommand);
+            OnPlayerCommandInput?.Invoke(playerCommand);
         }
     }
 
-    public void Disable()
+    public override void Disable()
     {
         Destroy(this);
-    }
-
-    private void OnDisable()
-    {
-        PlayerCollision.OnHitObstacle -= Disable;
     }
 }

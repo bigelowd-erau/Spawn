@@ -18,13 +18,13 @@ public class PlayerCollision : MonoBehaviour
     {
         if (collision.collider.tag == "Floor")
         {
-            OnFloorCollision(collision);
+            OnFloorCollision?.Invoke(collision);
         }
         else if (collision.collider.tag == "Obstacle")
         {
             collision.collider.GetComponent<MeshRenderer>().material.color = Color.red;
             //Call hit Obstacle event
-            OnHitObstacle();
+            OnHitObstacle?.Invoke();
             Destroy(this);
         }
     }

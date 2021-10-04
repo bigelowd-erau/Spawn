@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerMovementSubscriber
 {
     //the player object's rigid body
-    private Rigidbody rb;
+    public Rigidbody rb;
     public float forwardForce;
     public float sidewaysforce;
     //a sudo player rotation that is set when a new floor is touched
@@ -16,24 +16,31 @@ public class PlayerMovement : MonoBehaviour
     public delegate void GravityChange(float playerRotation);
     public static event GravityChange ChangeGravity;
 
-    void OnEnable()
+    public override void OnEnable()
     {
-        rb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
-        playerRotation = 0;
-        PlayerCollision.OnHitObstacle += Disable;
-        PlayerCollision.OnFloorCollision += CalcNewGravity;
+        base.OnEnable();
     }
-    public void Disable()
+    public void Start()
+    {
+        //rb = gameObject.GetComponent<Rigidbody>();
+        //rb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+        Debug.Log(rb);
+        playerRotation = 0;
+    }
+
+
+    public override void Disable()
     {
         //this.enabled = false;
         Destroy(this);
     }
-    private void OnDisable()
+    public override void CalcNewGravity(Collision collision)
     {
-        PlayerCollision.OnHitObstacle -= Disable;
-        PlayerCollision.OnFloorCollision -= CalcNewGravity;
+        //set player rotation to the floor's rotation
+        playerRotation = collision.collider.transform.rotation.eulerAngles.z;
+        //change the gravity towards the direction of the players new rotation.
+        ChangeGravity?.Invoke(playerRotation);
     }
-
     // Fixedupdate is called at a fixed time interval
     void FixedUpdate()
     {
@@ -52,13 +59,5 @@ public class PlayerMovement : MonoBehaviour
     public void MoveRight()
     {
         rb.AddForce(sidewaysforce * Time.deltaTime * Mathf.Cos(playerRadRot), sidewaysforce * Time.deltaTime * Mathf.Sin(playerRadRot), 0, ForceMode.VelocityChange);
-    }
-
-    public void CalcNewGravity(Collision collision)
-    {
-        //set player rotation to the floor's rotation
-        playerRotation = collision.collider.transform.rotation.eulerAngles.z;
-        //change the gravity towards the direction of the players new rotation.
-        ChangeGravity(playerRotation);
     }
 }

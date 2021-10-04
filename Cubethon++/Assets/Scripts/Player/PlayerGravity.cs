@@ -2,22 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGravity : MonoBehaviour
+public class PlayerGravity : PlayerGravitySubscriber
 {
-    private void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         ChangeGravity(0);
-        PlayerMovement.ChangeGravity += ChangeGravity;
-    }
-
-    private void OnDisable()
-    {
-        ChangeGravity(0);
-        PlayerMovement.ChangeGravity -= ChangeGravity;
     }
 
     //changes grabity to be in the direction of the current floor
-    public void ChangeGravity(float rotation)
+    public override void ChangeGravity(float rotation)
     {
         rotation = Mathf.Deg2Rad * rotation;
         Physics.gravity = new Vector3(20f*Mathf.Sin(rotation), -20f * Mathf.Cos(rotation), 0);

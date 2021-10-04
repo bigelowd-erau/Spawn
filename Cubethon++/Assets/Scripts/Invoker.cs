@@ -2,37 +2,46 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Invoker: MonoBehaviour
+public class Invoker: InvokerSubscriber
 {
-    private Command m_Command;
+    private CommandArgs _commandArgs;
 
-    public void OnEnable()
+    public override void SetCommand(Command command)
     {
-        Client.OnPlayerCommandInput += SetCommand;
+        _commandArgs.command = command;
     }
-
-    public void SetCommand(Command command)
+    public override void SetCommand(CommandArgs commandArg)
     {
-        m_Command = command;
+        _commandArgs = commandArg;
     }
 
     public void FixedUpdate()
     {
-        ExecuteCommand();
+        if (_commandArgs.command != null)
+        {
+            //execution time not set (therefore in not in replay)
+            if (_commandArgs.executionTime == 0.0f)
+            {
+                _commandArgs.executionTime = Time.timeSinceLevelLoad;
+                CommandLog.commands.Enqueue(_commandArgs);
+                ExecuteCommand();
+            }
+            else if(_commandArgs.executionTime >= Time.timeSinceLevelLoad)
+            {
+                ExecuteCommand();
+                if (CommandLog.commands.Count > 0)
+                    _commandArgs = CommandLog.commands.Dequeue();
+                else
+                    _commandArgs.command = null;
+            }
+            
+        }
     }
 
     public void ExecuteCommand()
     {
-        if (m_Command != null)
-        { 
-            m_Command.Execute();
-            CommandLog.commands.Enqueue(m_Command);
-            m_Command = null;
-        }
-    }
-
-    public void OnDisable()
-    {
-        Client.OnPlayerCommandInput -= SetCommand;
+        _commandArgs.command.Execute();
+        _commandArgs.command = null;
+        _commandArgs.executionTime = 0.0f;
     }
 }
