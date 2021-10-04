@@ -26,13 +26,19 @@ public class Invoker: InvokerSubscriber
                 CommandLog.commands.Enqueue(_commandArgs);
                 ExecuteCommand();
             }
-            else if(_commandArgs.executionTime >= Time.timeSinceLevelLoad)
+            else if(_commandArgs.executionTime <= Time.timeSinceLevelLoad)
             {
                 ExecuteCommand();
                 if (CommandLog.commands.Count > 0)
+                {
                     _commandArgs = CommandLog.commands.Dequeue();
+                    //Debug.Log(CommandLog.commands.Count);
+                }
                 else
+                {
                     _commandArgs.command = null;
+                    CommandLog.commands = null;
+                }
             }
             
         }

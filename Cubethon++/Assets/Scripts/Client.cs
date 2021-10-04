@@ -10,7 +10,7 @@ public class Client : ClientSubscriber
     public override void OnEnable()
     {
         base.OnEnable();
-        m_PlayerReciever = new PlayerReciever(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>());
+        m_PlayerReciever = new PlayerReciever(/*GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>()*/);
     }
 
     public void Update()

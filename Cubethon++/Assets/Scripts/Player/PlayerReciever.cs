@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class PlayerReciever : PlayerController
 {
-    public PlayerMovement pm;
+    //public PlayerMovement pm;
 
-    public PlayerReciever(PlayerMovement pm)
+    public PlayerReciever(/*PlayerMovement pm*/)
     {
-        this.pm = pm;
+        //this.pm = pm;
     }
     public override void MoveLeft()
     {
-        pm.MoveLeft();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().MoveLeft();
         //Debug.Log("Move Left");
     }
 
     public override void MoveRight()
     {
-        pm.MoveRight();
-        Debug.Log("Move Right");
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().MoveRight();
+        //Debug.Log("Move Right");
     }
 }

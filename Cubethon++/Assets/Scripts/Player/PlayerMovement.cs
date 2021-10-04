@@ -53,11 +53,14 @@ public class PlayerMovement : PlayerMovementSubscriber
 
     public void MoveLeft()
     {
+        Debug.Log("attemped move left");
         rb.AddForce(-sidewaysforce * Time.deltaTime * Mathf.Cos(playerRadRot), -sidewaysforce * Time.deltaTime * Mathf.Sin(playerRadRot), 0, ForceMode.VelocityChange);
     }
 
     public void MoveRight()
     {
+
+        Debug.Log("attemped move right");
         rb.AddForce(sidewaysforce * Time.deltaTime * Mathf.Cos(playerRadRot), sidewaysforce * Time.deltaTime * Mathf.Sin(playerRadRot), 0, ForceMode.VelocityChange);
     }
 }

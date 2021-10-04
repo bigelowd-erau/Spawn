@@ -13,20 +13,12 @@ public class GameManager : GameManagerSubscriber
     public delegate void SetCommand(CommandArgs commandArgs);
     public static event SetCommand SendSetCommand;
 
-    private delegate void RunGame();
-    RunGame GameRun;
-
     public override void OnEnable()
     {
         base.OnEnable();
-        if (CommandLog.commands != null)
-        {
-            GameRun = ReplayRun;
-        }
-        else
+        if (CommandLog.commands == null)
         {
             CommandLog.commands = new Queue<CommandArgs>();
-            GameRun = NormalRun;
         }
     }
 
@@ -45,7 +37,7 @@ public class GameManager : GameManagerSubscriber
 
     public void FixedUpdate()
     {
-        GameRun();
+        
     }
 
     //Called when the player loses the level

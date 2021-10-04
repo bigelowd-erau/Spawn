@@ -6,10 +6,10 @@ public abstract class InvokerSubscriber : MonoBehaviour, ISubscriber
     {
         //subscribe to different events
         //event.eventhandler += SetCommand;
-        if (CommandLog.commands != null)
-            GameManager.SendSetCommand += SetCommand;
-        else
+        if (CommandLog.commands == null || CommandLog.commands.Count == 0)
             Client.OnPlayerCommandInput += SetCommand;
+        else
+            GameManager.SendSetCommand += SetCommand;
     }
     public void Unsubscribe()
     {
